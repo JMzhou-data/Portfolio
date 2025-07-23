@@ -132,8 +132,8 @@ def enrich_missing_data(df):
 if __name__=="__main__":
     start_time = time.time()
 
-    input_file = "../data/netflix-rotten-tomatoes-metacritic-imdb.csv"
-    output_file = "../data/netflix_data.csv"
+    input_file = "../../data/netflix-rotten-tomatoes-metacritic-imdb.csv"
+    output_file = "../../data/netflix_data.csv"
 
     df = pd.read_csv(input_file)
     df = clean_netflix_data(df)
