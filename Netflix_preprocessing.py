@@ -1,3 +1,8 @@
+""" 
+Prétraitement du dataset Netflix 
+Nettoie les valeurs manquantes, convertit les formats de date et enrichit les données à l'aide de l'API TMDb
+"""
+
 import pandas as pd 
 import numpy as np 
 import requests 
@@ -6,7 +11,6 @@ import time
 import os
 from dotenv import load_dotenv # type: ignore
 from tqdm import tqdm # type: ignore
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ----------
 # Configuration
@@ -32,12 +36,14 @@ def convert_date_format(date_str):
 def query_tmdb(title):
     """ Recherche la date de sortie d'un film via l'API TMDb"""
     try:
+        # Step 1 : recherche du film
         response = requests.get(TMDB_SEARCH_URL, params={"api_key":TMDB_API_KEY, "query": title}).json()
         results = response.get("results")
         if not results:
             return None, None, None
         movie_id = results[0]['id']
 
+        # Step 2 : date de sortie
         release_response = requests.get(TMDB_RELEASE_URL.format(id=movie_id), params={"api_key": TMDB_API_KEY}).json()
         releases = release_response.get("results", [])
         release_date = None
@@ -50,6 +56,7 @@ def query_tmdb(title):
             if release_date:
                 break
         
+        # Step 3 : Réalisateur et acteurs
         credits_data = requests.get(TMDB_CREDITS_URL.format(movie_id=movie_id), params={"api_key": TMDB_API_KEY}).json()
         director = next((p['name'] for p in credits_data.get("crew", []) if p['job']=="Director"), None)
         actors_list = [actor['name'] for actor in credits_data.get("cast", [])[:3]]
@@ -61,6 +68,10 @@ def query_tmdb(title):
         print(f"Erreur TMDb pour '{title}' : {e}")
         return None, None, None
     
+# ----------
+# Traitement
+# ----------
+
 def clean_netflix_data(df):
     """Nettoyage des colonnes et remplissage des valeurs manquantes"""
 
@@ -88,40 +99,29 @@ def clean_netflix_data(df):
         'Trailer Site': "Unknown"
     }, inplace=True)
 
+    # Conversion de date
     df['Release Date'] = df['Release Date'].apply(convert_date_format)
 
     return df
 
-def fetch_tmdb_info(row):
-    """Fonction utilitaire pour multi-threading"""
-    missing_release = pd.isna(row['Release Date'])
-    missing_director = pd.isna(row['Director']) or row['Director'] == "Unknown"
-    missing_actors = pd.isna(row['Actors']) or row['Actors'] == "Unknown"
-    
-    if missing_release or missing_director or missing_actors:
-        release, director, actors = query_tmdb(row['Title'])
-        return (row.name, release, director, actors)
-    else:
-        return (row.name, None, None, None)
+def enrich_missing_data(df):
+    """Appel TMDb pour compléter les dates manquantes"""
+    for idx, row in tqdm(df.iterrows(), total=len(df), desc="Enrichissement TMDb"):
+        missing_release = pd.isna(row['Release Date'])
+        missing_director = pd.isna(row['Director']) or row['Director'] == "Unknown"
+        missing_actors = pd.isna(row['Actors']) or row['Actors'] == "Unknown"
 
-def enrich_missing_data(df, max_workers=5):
-    """Multi-threaded enrichment avec barre de progression"""
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(fetch_tmdb_info, row): idx for idx, row in df.iterrows()}
+        if missing_release or missing_director or missing_actors:
+            release, director, actors = query_tmdb(row['Title'])
         
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Enrichissement TMDb (multi-thread)"):
-            idx, release, director, actors = future.result()
-            if idx is None:
-                continue
-
-            if pd.isna(df.at[idx, 'Release Date']) and release:
+            if missing_release and release:
                 df.at[idx, 'Release Date'] = release
-            if (pd.isna(df.at[idx, 'Director']) or df.at[idx, 'Director'] == "Unknown") and director:
-                df.at[idx, 'Director'] = director
-            if (pd.isna(df.at[idx, 'Actors']) or df.at[idx, 'Actors'] == "Unknown") and actors:
-                df.at[idx, 'Actors'] = actors
+            if missing_director and director:
+                df.at[idx, 'Director'] = director 
+            if missing_actors and actors:
+                df.at[idx, 'Actors'] = actors 
 
-            time.sleep(0.2)  # Respecter limite API
+            time.sleep(0.2)  # éviter surcharge API
 
     return df
 
@@ -137,11 +137,11 @@ if __name__=="__main__":
 
     df = pd.read_csv(input_file)
     df = clean_netflix_data(df)
-    df = enrich_missing_data(df, max_workers=5)
+    df = enrich_missing_data(df)
 
     df.to_csv(output_file, index=False, encoding='utf-8-sig')
 
-    end_time = time.time() # 52.79 minutes
+    end_time = time.time() # 39.72 minutes
     print("\n Dataset nettoyé et sauvegardé sous:", output_file)
     print(df.info())
     print(f"\nTemps d'exécution total : {(end_time - start_time)/60:.2f} minutes")
