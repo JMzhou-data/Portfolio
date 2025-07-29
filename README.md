@@ -10,3 +10,5 @@ Les données récoltées prennent en compte les avis utilisateurs du 8 septembre
   2. Améliorer la qualité du dataset avec du scrapping ou des appels APIs pour compléter les valeurs manquantes
   3. Explorer les données
   4. Modéliser avec du machine learning
+
+<img width="1295" height="728" alt="Dashboard_PowerBI" src="https://github.com/user-attachments/assets/7efa16f3-36c4-4f90-b485-1b6e5480b693" />
