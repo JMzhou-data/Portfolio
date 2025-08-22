@@ -1,0 +1,22 @@
+# Clés secrètes et configs locales
+.env
+Keys_APIs.py
+
+# Fichiers de données
+*.csv
+*.xlsx
+*.json
+
+# Environnement virtuel
+venv/
+.env/
+__pycache__/
+*.pyc
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs et cache
+*.log
+.cache/
