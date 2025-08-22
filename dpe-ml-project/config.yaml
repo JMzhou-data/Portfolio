@@ -1,0 +1,15 @@
+data:
+  train_path: data/raw/train.csv
+  test_path: data/raw/test.csv
+  processed_path: data/processed/processed_data.csv
+split:
+  test_size: 0.2
+seed: 42
+model:
+  params:
+    n_estimators: 100
+    learning_rate: 0.1
+    max_depth: 6
+output:
+  model_path: outputs/models/xgboost_model.pkl
+  figure_path: outputs/figures/feature_importance.png

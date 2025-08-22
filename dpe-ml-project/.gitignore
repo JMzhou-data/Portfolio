@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Data
+data/processed/
+data/raw/*.csv
+
+# Outputs
+outputs/models/
+outputs/figures/
+
+# Misc
+*.log
+.DS_Store
