@@ -15,4 +15,5 @@ Les données récoltées prennent en compte les avis utilisateurs du 8 septembre
   4. Modéliser avec du machine learning
 >>>>>>> 46a4c8b (Update README.md)
 
-<img width="1295" height="728" alt="Dashboard_PowerBI" src="https://github.com/user-attachments/assets/7efa16f3-36c4-4f90-b485-1b6e5480b693" />
+<img width="1567" height="726" alt="Dashboard_PowerBI" src="https://github.com/user-attachments/assets/4382ee8d-20ef-4833-a308-367db8602691" />
+
