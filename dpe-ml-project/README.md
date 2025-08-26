@@ -11,9 +11,11 @@ Lien du challenge Kaggle : https://www.kaggle.com/competitions/esgi-x-inetum-hac
 Pour ce projet, j'ai réalisé en premier lieu un notebook où je nettoie les données brutes :
 - Suppression de colonnes
 - Suppression des valeurs aberrantes
-- Traitement pour les valeurs manquantes (variables catégorielles ou variables numériques)
+- Traitement pour les valeurs manquantes :
+    1. Variables catégorielles : imputation "missing" en cas de valeurs manquantes et one-hot encoding
+    2. Variables numériques : imputation avec la médiane pour les valeurs manquantes et one-hot encoding
 
-Pour l'entraînement, j'utilise le modèle XGBoost. Ensuite, j'effectue les prédictions sur un dataset fourni puis je soumets le résultat sur Kaggle, où j'ai obtenu le score de 90%. 
+Pour l'entraînement, j'utilise le modèle XGBoost. Ensuite, j'effectue les prédictions sur un dataset fourni puis je soumets le résultat sur Kaggle, où j'ai obtenu le score de 94%. 
 
 # Infrastructure pipeline
 
