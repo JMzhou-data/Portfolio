@@ -1,6 +1,5 @@
 # Projet d'évaluation de performance energétique d'un logement ou d'un bâtiment (DPE)
 
-Le Diagnostic de Performance Energétique (DPE)
 Le Diagnostic de Performance Energétique (DPE) renseigne sur la performance énergétique et environnementale d’un logement ou d’un bâtiment, en évaluant sa consommation d’énergie et son impact en matière d’émissions de gaz à effet de serre. Le contenu et les modalités d’établissement du DPE sont réglementés. Le DPE contient des informations sur les caractéristiques du bâtiment ou du logement (surface, orientation, murs, fenêtres, matériaux, etc.) ainsi que sur ses équipements (de chauffage, de production d’eau chaude sanitaire, de ventilation, etc.)
 
 Pour ce challenge c'est l'étiquette DPE que l'on cherche à prédire. Cette étiquette est une valeur comprise entre A et G et permet de savoir si le bâtiment et bon ou non d'un point de vue énergétique.
