@@ -7,7 +7,6 @@ from src.models.evaluate import evaluate_model
 
 def test_pipeline():
     """Teste l'exécution du pipeline complet sur un petit dataset mock."""
-    # Créer un dataset mock
     data = pd.DataFrame({
         'Surface_habitable_logement': [100, 150, 200],
         'Qualité_isolation_enveloppe': ['bonne', 'insuffisante', 'moyenne'],
